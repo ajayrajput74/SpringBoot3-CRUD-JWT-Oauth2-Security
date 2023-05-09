@@ -6,33 +6,30 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "roles")
 public class Role 
 {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "role_id")
 	private Long id;
-	
-	@Column(name = "role_name")
+
+	@Column(name = "role_name",unique = true , nullable = false)
 	private String name;
-	
-	public Role() {
-		super();
-		// TODO Auto-generated constructor stub
+
+	@Column(name = "description")
+	private String description;
+
+
+	public String getDescription() {
+		return description;
 	}
 
-	public Role(Long id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
+	public void setDescription(String description) {
+		this.description = description;
 	}
-
 
 	public Long getId() {
 		return id;

@@ -11,6 +11,5 @@ public class OauthProjectApplication {
 		SpringApplication.run(OauthProjectApplication.class, args);
 		
 		System.out.println("password "+new BCryptPasswordEncoder().encode("Ajay@123"));
-	}
-
+	} 
 }

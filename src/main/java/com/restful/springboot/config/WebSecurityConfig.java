@@ -22,13 +22,23 @@ import com.restful.springboot.securityhandler.HandlerAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig 
+public class WebSecurityConfig
 {
-	@Autowired
 	private UserDetailsService userDetailsService;
-	
-	@Autowired
+
 	private AuthTokenFilter authTokenFilter;
+
+	@Autowired
+	public void setUserDetailService(UserDetailsService userDetailsService)
+	{
+		this.userDetailsService = userDetailsService;
+	}
+
+	@Autowired
+	public void setAuthTokenFilter(AuthTokenFilter authTokenFilter)
+	{
+		this.authTokenFilter = authTokenFilter;
+	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -41,6 +51,11 @@ public class WebSecurityConfig
 
 		return authConfig.getAuthenticationManager();
 	}
+
+	//	@Autowired
+	//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+	//		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+	//	}
 
 	@Bean // (3)
 	public AuthenticationProvider authenticationProvider() { 
@@ -76,5 +91,6 @@ public class WebSecurityConfig
 		.requestMatchers("/userRole/updateUserRole").hasAnyAuthority("User","Admin")
 		.requestMatchers("/user/deleteUserById/*").hasAnyAuthority("User","Admin");
 		return http.build();
+		
 	}
 }

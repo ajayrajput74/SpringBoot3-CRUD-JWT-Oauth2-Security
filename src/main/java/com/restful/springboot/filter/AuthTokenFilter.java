@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import com.restful.springboot.config.TokenProvider;
 
 import jakarta.servlet.FilterChain;
@@ -22,11 +23,21 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class AuthTokenFilter extends OncePerRequestFilter
 {
-	@Autowired
 	private TokenProvider tokenProvider;
-
-	@Autowired
+	
 	private  UserDetailsService userService;
+	
+	@Autowired
+	public void setTokenProvider(TokenProvider tokenProvider)
+	{
+		this.tokenProvider = tokenProvider;
+	}
+	
+	@Autowired
+	public void setUserDetailsService(UserDetailsService userService)
+	{
+		this.userService = userService;
+	}
 
 	@Override
 	protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {

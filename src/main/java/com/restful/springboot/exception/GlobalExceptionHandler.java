@@ -17,7 +17,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
 {
-
 	@ExceptionHandler(Exception.class)
 	public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
 		List<String> details = new ArrayList<>();
@@ -44,6 +43,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
 		}
 		ErrorDetails error = new ErrorDetails("Validation Failed", details);
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-
 	}
+
+	@ExceptionHandler(DuplicateUserFoundException.class)
+	public final ResponseEntity<Object> handleBadRequestException(DuplicateUserFoundException ex, WebRequest request) {
+		List<String> details = new ArrayList<>();
+		details.add(ex.getLocalizedMessage());
+		ErrorDetails error = new ErrorDetails("Duplicate User Found", details);
+		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+	}	
 }

@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.restful.springboot.dto.UserDTO;
+import com.restful.springboot.exception.DuplicateUserFoundException;
 import com.restful.springboot.exception.RecordNotFoundException;
 import com.restful.springboot.model.User;
 import com.restful.springboot.repository.UserRepository;
@@ -22,26 +23,32 @@ import com.restful.springboot.repository.UserRepository;
 @Service
 public class UserService implements UserDetailsService , UserDetailsPasswordService
 {
-	@Autowired
+	
 	private UserRepository userRepository;
 
 	private PasswordEncoder passwordEncoder;
 
 	private final AccountStatusUserDetailsChecker detailsChecker = new AccountStatusUserDetailsChecker();
 
-	//@Autowired
-	//	public UserService(UserRepository repository) {
-	//		super();
-	//		this.userRepository = repository;
-	//	}
-
+	//error creating in setpasswordEncoder
 	@Autowired
 	public void setPasswordEncoder(PasswordEncoder passwordEncoder)
 	{
 		this.passwordEncoder = passwordEncoder;
 	}
+	
+	@Autowired
+	public void setUserRepository(UserRepository userRepository)
+	{
+		this.userRepository = userRepository;
+	}
 
-	public User createUser(User user) {
+	public User createUser(User user) 
+	{
+		if(userRepository.findByUsername(user.getUsername()).isPresent()) 
+		{
+			throw new DuplicateUserFoundException("User already exist");
+		}
 
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setEnabled(true);
@@ -50,6 +57,7 @@ public class UserService implements UserDetailsService , UserDetailsPasswordServ
 		user.setCredentialsNonExpired(true);
 		return userRepository.save(user);
 	}
+
 
 	public User getUserById(Long id) {
 		Optional<User> optionUser = userRepository.findById(id);

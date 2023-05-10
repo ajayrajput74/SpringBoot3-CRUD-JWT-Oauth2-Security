@@ -49,7 +49,6 @@ public class UserController
 	public ResponseEntity<User> createUser(@Valid @RequestBody User user)
 	{
 		User saveUser = service.createUser(user);	
-
 		return new ResponseEntity<>(saveUser ,HttpStatus.CREATED);
 	}
 
